@@ -2,7 +2,7 @@ ESX = nil
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-ESX.RegisterServerCallback('ncrp-races:getMoney', function(source, cb, money)
+ESX.RegisterServerCallback('esx-qalle-races:getMoney', function(source, cb, money)
     local xPlayer = ESX.GetPlayerFromId(source)
 
     if xPlayer ~= nil then
@@ -18,8 +18,8 @@ ESX.RegisterServerCallback('ncrp-races:getMoney', function(source, cb, money)
 
 end)
 
-RegisterServerEvent('ncrp-races:addTime')
-AddEventHandler('ncrp-races:addTime', function(time, race)
+RegisterServerEvent('esx-qalle-races:addTime')
+AddEventHandler('esx-qalle-races:addTime', function(time, race)
     local xPlayer = ESX.GetPlayerFromId(source)
 
     local name = "none"
@@ -67,7 +67,7 @@ AddEventHandler('ncrp-races:addTime', function(time, race)
     end)
 end)
 
-ESX.RegisterServerCallback('ncrp-races:getScoreboard', function(source, cb, race)
+ESX.RegisterServerCallback('esx-qalle-races:getScoreboard', function(source, cb, race)
     local identifier = ESX.GetPlayerFromId(source).identifier
 
     MySQL.Async.fetchAll(

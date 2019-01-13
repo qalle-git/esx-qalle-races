@@ -39,7 +39,7 @@ Citizen.CreateThread(function()
             if distance < 10.0 then
                 sleep = 5
 
-                ESX.DrawMarker('[E] Race Menu', 27, val['StartRace']['x'], val['StartRace']['y'], val['StartRace']['z'])
+                ESX.Game.Utils.DrawText3D(val['StartRace'], '[E] Race Menu', 0.4)
 
                 if distance < 1.5 then
                     if IsControlJustReleased(0, 38) then
@@ -107,7 +107,7 @@ function StartRace(currentRace)
                     DeleteCheckpoint(CheckPoint)
                     RemoveBlip(Blip)
                     ESX.ShowNotification("You finished the " .. currentRace .. " with a time of " .. currentTime .. " seconds !")
-                    TriggerServerEvent('ncrp-races:addTime', currentTime, currentRace)
+                    TriggerServerEvent('esx-qalle-races:addTime', currentTime, currentRace)
                     DeleteEntity(RaceVehicle)
 
                     return
@@ -132,7 +132,7 @@ function StartCountdown(race)
 
     local raceInfo = Config.RaceInformations[race]
 
-    ESX.LoadModel(raceInfo['Vehicle'])
+    LoadModel(raceInfo['Vehicle'])
 
     RaceVehicle = CreateVehicle(GetHashKey(raceInfo['Vehicle']), raceInfo['StartPosition']['x'], raceInfo['StartPosition']['y'], raceInfo['StartPosition']['z'], raceInfo['StartPosition']['h'], true, false)
 
@@ -175,7 +175,7 @@ function OpenRaceMenu(race)
 
             if action == 'start' then
                 if ESX.Game.IsSpawnPointClear(Config.RaceInformations[race]['StartPosition'], 5.0) then
-                    ESX.TriggerServerCallback('ncrp-races:getMoney', function(hasEnough)
+                    ESX.TriggerServerCallback('esx-qalle-races:getMoney', function(hasEnough)
                         if hasEnough then
                             menu.close()
                             StartCountdown(race)
@@ -200,7 +200,7 @@ function OpenScoreboard(race)
 
     local elem = {}
 
-    ESX.TriggerServerCallback('ncrp-races:getScoreboard', function(Races)
+    ESX.TriggerServerCallback('esx-qalle-races:getScoreboard', function(Races)
 
         for i=1, #Races, 1 do
             table.insert(elem, {label = Races[i].name .. ' ' .. tonumber(string.format("%.2f", Races[i].time)) .. 's'})
@@ -241,4 +241,11 @@ function formatTimer(startTime, currTime)
     newString = string.format("%s%s.%s", min, sec, ms)
 
     return newString
+end
+
+LoadModel = function(model)
+    while not HasModelLoaded(model) do
+          RequestModel(model)
+          Citizen.Wait(10)
+    end
 end
