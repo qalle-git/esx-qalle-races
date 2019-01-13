@@ -180,11 +180,11 @@ function OpenRaceMenu(race)
                             menu.close()
                             StartCountdown(race)
                         else
-                            ESX.ShowNotification('Du har inte råd att köra race')
+                            ESX.ShowNotification("You don't have enough money to race in " .. race)
                         end
                     end, Config.Price)
                 else
-                    ESX.ShowNotification('Det är redan någon som kör!')
+                    ESX.ShowNotification("It's already someone thats racing!")
                 end
 
             elseif action == 'scoreboard' then
