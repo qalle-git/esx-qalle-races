@@ -44,11 +44,11 @@ AddEventHandler('esx-qalle-races:addTime', function(time, race)
     Citizen.Wait(1000)
 
     MySQL.Async.fetchAll(
-        'SELECT name, time FROM user_races WHERE name = @identifier and race = @race', {['@identifier'] = name, ['@race'] = race},
+        'SELECT username, racetime FROM user_races WHERE username = @identifier and race = @race', {['@identifier'] = name, ['@race'] = race},
     function(result)
         if result[1] ~= nil and result[1].time > time then
             MySQL.Async.execute(
-                'UPDATE user_races SET time = @time WHERE name = @identifier and race = @race',
+                'UPDATE user_races SET racetime = @time WHERE username = @identifier and race = @race',
                 {
                     ['@identifier'] = name,
                     ['@race'] = race,
@@ -56,7 +56,7 @@ AddEventHandler('esx-qalle-races:addTime', function(time, race)
                 }
             )
         elseif result[1] == nil then
-            MySQL.Async.execute('INSERT INTO user_races (name, time, race) VALUES (@name, @time, @race)',
+            MySQL.Async.execute('INSERT INTO user_races (username, racetime, race) VALUES (@name, @time, @race)',
                 {
                     ['@name'] = name,
                     ['@time'] = time,
@@ -71,7 +71,7 @@ ESX.RegisterServerCallback('esx-qalle-races:getScoreboard', function(source, cb,
     local identifier = ESX.GetPlayerFromId(source).identifier
 
     MySQL.Async.fetchAll(
-        'SELECT * FROM user_races WHERE race = @race ORDER BY time ASC LIMIT 10', {['@race'] = race},
+        'SELECT * FROM user_races WHERE race = @race ORDER BY racetime ASC LIMIT 10', {['@race'] = race},
     function(result)
 
         local Races = {}
